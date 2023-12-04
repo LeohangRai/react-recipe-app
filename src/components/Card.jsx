@@ -1,17 +1,15 @@
-export default function Card() {
+export default function Card({ recipeInfo }) {
+  const { name, image, tag, time } = recipeInfo;
   return (
     <div className="card">
-      <img
-        src="https://img.freepik.com/premium-photo/dum-handi-muttona-biryania-gosht-pilaf-is-prepared-earthen-clay-pot-called-haandi-1-kilo-size-popular-indian-non-vegetarian-fooda_466689-52328.jpg?w=740"
-        alt=""
-      />
+      <img src={image} alt="" />
       <div className="card-content">
-        <h3>Mutton Biryani</h3>
+        <h3>{name}</h3>
         <div className="card-info">
           <div className="tag">
-            <p>Dinner</p>
+            <p>{tag}</p>
           </div>
-          <p className="time-text">60 mins</p>
+          <p className="time-text">{time} mins</p>
         </div>
       </div>
     </div>
