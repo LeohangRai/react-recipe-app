@@ -1,7 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Card({ recipeInfo }) {
-  const { name, image, tag, time } = recipeInfo;
+  const { id, name, image, tag, time } = recipeInfo;
+  const navigate = useNavigate();
+  const navigateToReceipePage = () => {
+    navigate(`/recipe/${id}`);
+  };
   return (
-    <div className="card">
+    <div className="card" onClick={navigateToReceipePage}>
       <img src={image} alt="" />
       <div className="card-content">
         <h3>{name}</h3>
