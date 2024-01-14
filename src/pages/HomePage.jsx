@@ -4,12 +4,13 @@ import Loading from '../components/Loading';
 import useFetchRecipes from '../hooks/useFetchRecipes';
 
 export default function HomePage() {
-  const [data, loading] = useFetchRecipes();
+  const [data, loading, errorMsg] = useFetchRecipes();
   return (
     <>
       <Header />
       {loading && <Loading />}
       {data && <CardList recipes={data} />}
+      {errorMsg && <p>{errorMsg}</p>}
     </>
   );
 }

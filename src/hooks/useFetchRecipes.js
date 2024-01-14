@@ -17,15 +17,19 @@ const options = {
 const useFetchRecipes = () => {
   const [recipes, setRecipes] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const fetchRecipes = async () => {
     setLoading(true);
+    setRecipes(null);
+    setErrorMsg(null);
     try {
       const response = await axios.request(options);
       setRecipes(response.data.results);
       setLoading(false);
     } catch (error) {
       console.error(error);
+      setErrorMsg(error.message);
       setLoading(false);
     }
   };
@@ -34,7 +38,7 @@ const useFetchRecipes = () => {
     fetchRecipes();
   }, []);
 
-  return [recipes, loading];
+  return [recipes, loading, errorMsg];
 };
 
 export default useFetchRecipes;

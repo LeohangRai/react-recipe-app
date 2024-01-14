@@ -15,9 +15,9 @@ export default function Card({ recipeInfo }) {
           <div className="tag">
             <p>{topics[0]?.name}</p>
           </div>
-          {total_time_minutes && (
+          {total_time_minutes ? (
             <p className="time-text">{total_time_minutes} mins</p>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
