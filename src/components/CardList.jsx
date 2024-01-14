@@ -1,7 +1,6 @@
-import { recipes } from '../data/recipes';
 import Card from './Card';
 
-export default function CardList() {
+export default function CardList({ recipes }) {
   return (
     <section className="cards">
       {recipes.map((recipe) => {
