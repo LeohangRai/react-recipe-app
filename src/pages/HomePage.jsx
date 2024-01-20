@@ -10,10 +10,16 @@ export default function HomePage() {
   useEffect(() => {
     fetchRecipes();
   }, []);
-  
+
+  const handleSearch = (keyword) => {
+    if (keyword) {
+      fetchRecipes(keyword);
+    }
+  };
+
   return (
     <>
-      <Header />
+      <Header handleSearch={handleSearch} />
       {loading && <Loading />}
       {data && <CardList recipes={data} />}
       {errorMsg && <p>{errorMsg}</p>}

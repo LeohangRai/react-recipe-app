@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 const options = {
@@ -28,7 +28,7 @@ const useFetchRecipes = () => {
       if (keyword) {
         requestOpts.params.q = keyword;
       }
-      const response = await axios.request(options);
+      const response = await axios.request(requestOpts);
       setRecipes(response.data.results);
       setLoading(false);
     } catch (error) {

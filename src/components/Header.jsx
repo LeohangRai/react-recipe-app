@@ -1,4 +1,12 @@
-export default function Header() {
+import { useState } from 'react';
+
+export default function Header({ handleSearch }) {
+  const [keyword, setKeyword] = useState('');
+
+  const handleSearchButtonClick = () => {
+    handleSearch(keyword);
+  };
+
   return (
     <header className="main_header">
       <div className="text-container">
@@ -12,8 +20,19 @@ export default function Header() {
           cumque atque.
         </p>
         <div className="header-input-container">
-          <input type="text" name="" id="" placeholder="Find a recipe..." />
-          <button>Search</button>
+          <input
+            type="text"
+            name=""
+            id=""
+            placeholder="Find a recipe..."
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch(keyword);
+              }
+            }}
+          />
+          <button onClick={handleSearchButtonClick}>Search</button>
         </div>
       </div>
       <div>

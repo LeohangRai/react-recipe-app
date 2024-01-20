@@ -13,7 +13,7 @@ export default function Card({ recipeInfo }) {
         <h3>{name}</h3>
         <div className="card-info">
           <div className="tag">
-            <p>{topics[0]?.name}</p>
+            {topics?.length && <p>{topics[0]?.name}</p>}
           </div>
           {total_time_minutes ? (
             <p className="time-text">{total_time_minutes} mins</p>
