@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { useReducer } from 'react';
+import {
+  FetchHookActions,
+  initialFetchState
+} from '../common/constants/fetchHookConstants';
+import fetchHookReducer from '../common/reducers/fetchHookReducer';
 
 const options = {
   method: 'GET',
@@ -11,63 +16,26 @@ const options = {
   }
 };
 
-const initialState = {
-  data: null,
-  isLoading: false,
-  errorMsg: null
-};
-
-const Actions = {
-  FETCHING_DATA: 'FETCHING_DATA',
-  FETCH_SUCCESS: 'FETCH_SUCCESS',
-  FETCH_ERROR: 'FETCH_ERROR'
-};
-
-const reducer = (_, action) => {
-  switch (action.type) {
-    case Actions.FETCHING_DATA:
-      return {
-        data: null,
-        isLoading: true,
-        errorMsg: null
-      };
-    case Actions.FETCH_SUCCESS:
-      return {
-        data: action.payload,
-        isLoading: false,
-        errorMsg: null
-      };
-    case Actions.FETCH_ERROR:
-      return {
-        data: null,
-        isLoading: false,
-        errorMsg: action.payload
-      };
-    default:
-      return initialState;
-  }
-};
-
 const useFetchRecipe = () => {
   const [{ data, isLoading, errorMsg }, dispatch] = useReducer(
-    reducer,
-    initialState
+    fetchHookReducer,
+    initialFetchState
   );
   const fetchRecipe = async (id) => {
     dispatch({
-      type: Actions.FETCHING_DATA
+      type: FetchHookActions.FETCHING_DATA
     });
     try {
       const requestOpts = { ...options };
       requestOpts.params.id = id;
       const response = await axios.request(requestOpts);
       dispatch({
-        type: Actions.FETCH_SUCCESS,
+        type: FetchHookActions.FETCH_SUCCESS,
         payload: response.data
       });
     } catch (error) {
       dispatch({
-        type: Actions.FETCH_ERROR,
+        type: FetchHookActions.FETCH_ERROR,
         payload: error.message
       });
     }
