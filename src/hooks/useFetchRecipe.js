@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useReducer } from 'react';
 
 const options = {
   method: 'GET',
@@ -11,28 +11,69 @@ const options = {
   }
 };
 
-const useFetchRecipe = () => {
-  const [recipe, setRecipe] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
+const initialState = {
+  data: null,
+  isLoading: false,
+  errorMsg: null
+};
 
+const Actions = {
+  FETCHING_DATA: 'FETCHING_DATA',
+  FETCH_SUCCESS: 'FETCH_SUCCESS',
+  FETCH_ERROR: 'FETCH_ERROR'
+};
+
+const reducer = (_, action) => {
+  switch (action.type) {
+    case Actions.FETCHING_DATA:
+      return {
+        data: null,
+        isLoading: true,
+        errorMsg: null
+      };
+    case Actions.FETCH_SUCCESS:
+      return {
+        data: action.payload,
+        isLoading: false,
+        errorMsg: null
+      };
+    case Actions.FETCH_ERROR:
+      return {
+        data: null,
+        isLoading: false,
+        errorMsg: action.payload
+      };
+    default:
+      return initialState;
+  }
+};
+
+const useFetchRecipe = () => {
+  const [{ data, isLoading, errorMsg }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const fetchRecipe = async (id) => {
-    setRecipe(null);
-    setIsLoading(true);
-    setErrorMsg(null);
+    dispatch({
+      type: Actions.FETCHING_DATA
+    });
     try {
       const requestOpts = { ...options };
       requestOpts.params.id = id;
       const response = await axios.request(requestOpts);
-      setRecipe(response.data);
-      setIsLoading(false);
+      dispatch({
+        type: Actions.FETCH_SUCCESS,
+        payload: response.data
+      });
     } catch (error) {
-      setErrorMsg(error.message);
-      setIsLoading(false);
+      dispatch({
+        type: Actions.FETCH_ERROR,
+        payload: error.message
+      });
     }
   };
 
-  return [fetchRecipe, { data: recipe, isLoading, errorMsg }];
+  return [fetchRecipe, { data, isLoading, errorMsg }];
 };
 
 export default useFetchRecipe;
