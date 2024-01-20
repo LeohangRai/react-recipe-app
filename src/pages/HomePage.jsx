@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import useFetchRecipes from '../hooks/useFetchRecipes';
 
 export default function HomePage() {
-  const [fetchRecipes, { data, loading, errorMsg }] = useFetchRecipes();
+  const [fetchRecipes, { data, isLoading, errorMsg }] = useFetchRecipes();
 
   useEffect(() => {
     fetchRecipes();
@@ -20,7 +20,7 @@ export default function HomePage() {
   return (
     <>
       <Header handleSearch={handleSearch} />
-      {loading && <Loading />}
+      {isLoading && <Loading />}
       {data && <CardList recipes={data} />}
       {errorMsg && <p>{errorMsg}</p>}
     </>

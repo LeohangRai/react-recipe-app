@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import { useReducer } from 'react';
 import axios from 'axios';
+import fetchHookReducer from '../common/reducers/fetchHookReducer';
+import {
+  FetchHookActions,
+  initialFetchState
+} from '../common/constants/fetchHookConstants';
 
 const options = {
   method: 'GET',
@@ -15,30 +20,33 @@ const options = {
 };
 
 const useFetchRecipes = () => {
-  const [recipes, setRecipes] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-
+  const [{ data, isLoading, errorMsg }, dispatch] = useReducer(
+    fetchHookReducer,
+    initialFetchState
+  );
   const fetchRecipes = async (keyword) => {
-    setLoading(true);
-    setRecipes(null);
-    setErrorMsg(null);
+    dispatch({
+      type: FetchHookActions.FETCHING_DATA
+    });
     try {
       const requestOpts = { ...options };
       if (keyword) {
         requestOpts.params.q = keyword;
       }
       const response = await axios.request(requestOpts);
-      setRecipes(response.data.results);
-      setLoading(false);
+      dispatch({
+        type: FetchHookActions.FETCH_SUCCESS,
+        payload: response.data.results
+      });
     } catch (error) {
-      console.error(error);
-      setErrorMsg(error.message);
-      setLoading(false);
+      dispatch({
+        type: FetchHookActions.FETCH_ERROR,
+        payload: error.message
+      });
     }
   };
 
-  return [fetchRecipes, { data: recipes, loading, errorMsg }];
+  return [fetchRecipes, { data, isLoading, errorMsg }];
 };
 
 export default useFetchRecipes;
